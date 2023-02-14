@@ -5,7 +5,7 @@ screenWidth = 1024
 screenHeight = 512
 
 paddleHeight = 64
-paddleWidth = 8
+paddleWidth = 12
 paddleGap = 24
 paddleSpeed = 4
 
@@ -33,6 +33,9 @@ collisionTolerance = 10
 pygame.init()
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 clock = pygame.time.Clock()
+textFont = pygame.font.Font("assets/bit5x3.ttf", 120)
+
+
 
 def drawRightPaddle():
     global paddleSpeed, screenHeight, paddleHeight
@@ -114,6 +117,29 @@ def drawBouncingBall():
 
     pygame.draw.rect(screen, (255, 255, 255), ball)
 
+def drawScore():
+    global scoreLeft, scoreRight
+    
+    if scoreLeft > 99:
+        scoreLeft = 99
+
+    if scoreLeft < 10:
+        scoreLeftDisplay = textFont.render("0" + str(scoreLeft), 1, (255, 255, 255))
+        screen.blit(scoreLeftDisplay, ((screenWidth / 2) - 125, 15))
+    else:
+        scoreLeftDisplay = textFont.render(str(scoreLeft), 1, (255, 255, 255))
+        screen.blit(scoreLeftDisplay, ((screenWidth / 2) - 125, 15))
+
+    if scoreRight > 99:
+        scoreRight = 99
+
+    if scoreRight < 10:
+        scoreRightDisplay = textFont.render("0" + str(scoreRight), 1, (255, 255, 255))
+        screen.blit(scoreRightDisplay, ((screenWidth / 2) + 20, 15))
+    else:
+        scoreRightDisplay = textFont.render(str(scoreRight), 1, (255, 255, 255))
+        screen.blit(scoreRightDisplay, ((screenWidth / 2) + 20, 15))
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
@@ -127,6 +153,7 @@ while True:
     drawRightPaddle()
     drawLeftPaddle()
     drawBouncingBall()
+    drawScore()
     pygame.display.update()
     clock.tick(60)
 
