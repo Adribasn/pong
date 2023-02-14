@@ -26,14 +26,26 @@ while True:
     key = pygame.key.get_pressed()
     
     if key[pygame.K_UP]:
-        rightPaddleY -= paddleSpeed
+        if (rightPaddleY - paddleSpeed) > 0:
+            rightPaddleY -= paddleSpeed
+        else:
+            rightPaddleY = 0
     if key[pygame.K_DOWN]:
-        rightPaddleY += paddleSpeed
+        if (rightPaddleY + paddleSpeed) < (screenHeight - paddleHeight):
+            rightPaddleY += paddleSpeed
+        else:
+            rightPaddleY = screenHeight - paddleHeight
 
     if key[pygame.K_w]:
-        leftPaddleY -= paddleSpeed
+        if (leftPaddleY - paddleSpeed) > 0:
+            leftPaddleY -= paddleSpeed
+        else:
+            leftPaddleY = 0
     if key[pygame.K_s]:
-        leftPaddleY += paddleSpeed
+        if (leftPaddleY + paddleSpeed) < (screenHeight - paddleHeight):
+            leftPaddleY += paddleSpeed
+        else:
+            leftPaddleY = screenHeight - paddleHeight
     
     screen.fill((0, 0, 0))
     pygame.draw.rect(screen, (255, 255, 255), ((screenWidth/2) - 3, 0, 6, screenHeight))
