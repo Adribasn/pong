@@ -20,7 +20,8 @@ leftPaddle = pygame.Rect(leftPaddleX, leftPaddleY, paddleWidth, paddleHeight)
 ballHeight = 16
 ballWidth = 16
 ballSpeedX = 4
-ballSpeedY = random.choice([-4, 4])
+#ballSpeedY = random.choice([-4, 4])
+ballSpeedY = random.randint(-4, 4)
 ballX = int(screenWidth / 2) + 16
 ballY = random.randint(0, screenHeight - ballHeight)
 ball = pygame.Rect(ballX, ballY, ballWidth, ballHeight)
@@ -81,7 +82,7 @@ def drawBouncingBall():
         ball.y = random.randint(0, screenHeight - ballHeight)
 
         ballSpeedX = 3
-        ballSpeedY = random.choice([-4, 4])
+        ballSpeedY = random.randint(-4, 4)
     
     if ball.right >= screenWidth:
         scoreLeft += 1
@@ -90,7 +91,7 @@ def drawBouncingBall():
         ball.y = random.randint(0, screenHeight - ballHeight)
 
         ballSpeedX = -3
-        ballSpeedY = random.choice([-4, 4])
+        ballSpeedY = random.randint(-4, 4)
     
     if ball.colliderect(rightPaddle):
         if abs(rightPaddle.left - ball.right) < collisionTolerance:
