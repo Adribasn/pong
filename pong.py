@@ -1,4 +1,5 @@
 import pygame, sys
+import random
 
 screenWidth = 1024
 screenHeight = 512
@@ -15,6 +16,18 @@ rightPaddle = pygame.Rect(rightPaddleX, rightPaddleY, paddleWidth, paddleHeight)
 leftPaddleX = paddleGap 
 leftPaddleY = int((screenHeight - paddleHeight) / 2)
 leftPaddle = pygame.Rect(leftPaddleX, leftPaddleY, paddleWidth, paddleHeight)
+
+ballHeight = 16
+ballWidth = 16
+ballSpeedX= 3
+ballSpeedY = random.choice([-3, 3])
+ballX = int(screenWidth / 2) + 16
+ballY = random.randint(0, screenHeight - ballHeight)
+ball = pygame.Rect(ballX, ballY, ballWidth, ballHeight)
+
+scoreLeft = 0
+scoreRight = 0
+
 pygame.init()
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 clock = pygame.time.Clock()
@@ -51,6 +64,34 @@ def drawLeftPaddle():
 
     pygame.draw.rect(screen, (255, 255, 255), leftPaddle)
 
+def drawBouncingBall():
+    global ballSpeedX, ballSpeedY, scoreLeft, scoreRight
+
+    ball.x += ballSpeedX
+    ball.y += ballSpeedY
+
+    if ball.top <= 0 or ball.bottom >= screenHeight:
+        ballSpeedY *= -1
+
+    if ball.left <= 0:
+        scoreRight += 1
+        ball.x = int(screenWidth / 2) + 16
+        ball.y = random.randint(0, screenHeight - ballHeight)
+
+        ballSpeedX = 3
+        ballSpeedY = random.choice([-3, 3])
+    
+    if ball.right >= screenWidth:
+        scoreLeft += 1
+
+        ball.x = int(screenWidth / 2) - ballWidth - 16
+        ball.y = random.randint(0, screenHeight - ballHeight)
+
+        ballSpeedX = -3
+        ballSpeedY = random.choice([-3, 3])
+
+    pygame.draw.rect(screen, (255, 255, 255), ball)
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
@@ -63,6 +104,7 @@ while True:
     pygame.draw.rect(screen, (255, 255, 255), ((screenWidth/2) - 3, 0, 6, screenHeight))
     drawRightPaddle()
     drawLeftPaddle()
+    drawBouncingBall()
     pygame.display.update()
     clock.tick(60)
 
