@@ -10,44 +10,46 @@ paddleSpeed = 3
 
 rightPaddleX = screenWidth - paddleGap - paddleWidth
 rightPaddleY = int((screenHeight - paddleHeight) / 2)
+rightPaddle = pygame.Rect(rightPaddleX, rightPaddleY, paddleWidth, paddleHeight)
 
 leftPaddleX = paddleGap 
 leftPaddleY = int((screenHeight - paddleHeight) / 2)
+leftPaddle = pygame.Rect(leftPaddleX, leftPaddleY, paddleWidth, paddleHeight)
 pygame.init()
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 clock = pygame.time.Clock()
 
 def drawRightPaddle():
-    global rightPaddleY, paddleSpeed, screenHeight, paddleHeight
+    global paddleSpeed, screenHeight, paddleHeight
 
     if key[pygame.K_UP]:
-        if (rightPaddleY - paddleSpeed) > 0:
-            rightPaddleY -= paddleSpeed
+        if (rightPaddle.y - paddleSpeed) > 0:
+            rightPaddle.y -= paddleSpeed
         else:
-            rightPaddleY = 0
+            rightPaddle.y = 0
     if key[pygame.K_DOWN]:
-        if (rightPaddleY + paddleSpeed) < (screenHeight - paddleHeight):
-            rightPaddleY += paddleSpeed
+        if (rightPaddle.y + paddleSpeed) < (screenHeight - paddleHeight):
+            rightPaddle.y += paddleSpeed
         else:
-            rightPaddleY = screenHeight - paddleHeight
+            rightPaddle.y = screenHeight - paddleHeight
     
-    pygame.draw.rect(screen, (255, 255, 255), (rightPaddleX, rightPaddleY, paddleWidth, paddleHeight))
+    pygame.draw.rect(screen, (255, 255, 255), rightPaddle)
 
 def drawLeftPaddle():
-    global leftPaddleY, paddleSpeed, screenHeight, paddleHeight
+    global paddleSpeed, screenHeight, paddleHeight
 
     if key[pygame.K_w]:
-        if (leftPaddleY - paddleSpeed) > 0:
-            leftPaddleY -= paddleSpeed
+        if (leftPaddle.y - paddleSpeed) > 0:
+            leftPaddle.y -= paddleSpeed
         else:
-            leftPaddleY = 0
+            leftPaddle.y = 0
     if key[pygame.K_s]:
-        if (leftPaddleY + paddleSpeed) < (screenHeight - paddleHeight):
-            leftPaddleY += paddleSpeed
+        if (leftPaddle.y + paddleSpeed) < (screenHeight - paddleHeight):
+            leftPaddle.y += paddleSpeed
         else:
-            leftPaddleY = screenHeight - paddleHeight
+            leftPaddle.y = screenHeight - paddleHeight
 
-    pygame.draw.rect(screen, (255, 255, 255), (leftPaddleX, leftPaddleY, paddleWidth, paddleHeight))
+    pygame.draw.rect(screen, (255, 255, 255), leftPaddle)
 
 while True:
     for event in pygame.event.get():
