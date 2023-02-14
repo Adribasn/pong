@@ -17,14 +17,9 @@ pygame.init()
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 clock = pygame.time.Clock()
 
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-            pygame.quit()
-            sys.exit()
+def drawRightPaddle():
+    global rightPaddleY, paddleSpeed, screenHeight, paddleHeight
 
-    key = pygame.key.get_pressed()
-    
     if key[pygame.K_UP]:
         if (rightPaddleY - paddleSpeed) > 0:
             rightPaddleY -= paddleSpeed
@@ -35,6 +30,11 @@ while True:
             rightPaddleY += paddleSpeed
         else:
             rightPaddleY = screenHeight - paddleHeight
+    
+    pygame.draw.rect(screen, (255, 255, 255), (rightPaddleX, rightPaddleY, paddleWidth, paddleHeight))
+
+def drawLeftPaddle():
+    global leftPaddleY, paddleSpeed, screenHeight, paddleHeight
 
     if key[pygame.K_w]:
         if (leftPaddleY - paddleSpeed) > 0:
@@ -46,11 +46,21 @@ while True:
             leftPaddleY += paddleSpeed
         else:
             leftPaddleY = screenHeight - paddleHeight
+
+    pygame.draw.rect(screen, (255, 255, 255), (leftPaddleX, leftPaddleY, paddleWidth, paddleHeight))
+
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+            pygame.quit()
+            sys.exit()
+
+    key = pygame.key.get_pressed()
     
     screen.fill((0, 0, 0))
     pygame.draw.rect(screen, (255, 255, 255), ((screenWidth/2) - 3, 0, 6, screenHeight))
-    pygame.draw.rect(screen, (255, 255, 255), (rightPaddleX, rightPaddleY, paddleWidth, paddleHeight))
-    pygame.draw.rect(screen, (255, 255, 255), (leftPaddleX, leftPaddleY, paddleWidth, paddleHeight))
+    drawRightPaddle()
+    drawLeftPaddle()
     pygame.display.update()
     clock.tick(60)
 
