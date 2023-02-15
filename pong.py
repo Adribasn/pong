@@ -135,7 +135,7 @@ def drawBouncingBall():
             bounceSound.play()
     
     if ball.colliderect(leftPaddle):
-        playBounce = False
+        playSound = False
         if abs(leftPaddle.right - ball.left) < collisionTolerance and ballSpeedX < 0:
             playSound = True
             ballSpeedX *= -1
