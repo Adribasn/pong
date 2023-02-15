@@ -27,8 +27,6 @@ while True:
     if 6 < math.sqrt(pow(ballSpeedX, 2) + pow(ballSpeedY, 2)) < 7:
         break
     
-
-
 ballX = int(screenWidth / 2) + 16
 ballY = random.randint(0, screenHeight - ballHeight)
 ball = pygame.Rect(ballX, ballY, ballWidth, ballHeight)
@@ -42,6 +40,10 @@ pygame.init()
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 clock = pygame.time.Clock()
 textFont = pygame.font.Font("assets/bit5x3.ttf", 120)
+hitSound = pygame.mixer.Sound("assets\hit.wav")
+hitSound.set_volume(.5)
+bounceSound = pygame.mixer.Sound("assets/blip.wav")
+bounceSound.set_volume(.25)
 
 def drawRightPaddle():
     global paddleSpeed, screenHeight, paddleHeight
@@ -82,10 +84,13 @@ def drawBouncingBall():
     ball.y += ballSpeedY
 
     if ball.top <= 0 or ball.bottom >= screenHeight:
+        bounceSound.play()
         ballSpeedY *= -1
 
     if ball.left <= 0:
+        hitSound.play()
         scoreRight += 1
+        
         ball.x = int(screenWidth / 2) - ballWidth - 16
         ball.y = random.randint(0, screenHeight - ballHeight)
 
@@ -96,6 +101,7 @@ def drawBouncingBall():
                 break
     
     if ball.right >= screenWidth:
+        hitSound.play()
         scoreLeft += 1
 
         ball.x = int(screenWidth / 2) + 16
@@ -108,26 +114,41 @@ def drawBouncingBall():
                 break
     
     if ball.colliderect(rightPaddle):
+        playSound = False
         if abs(rightPaddle.left - ball.right) < collisionTolerance and ballSpeedX > 0:
+            playSound = True
             ballSpeedX *= -1
         if abs(rightPaddle.right - ball.left) < collisionTolerance and ballSpeedX < 0:
+            playSound = False
             ballSpeedX *= -1
         if abs(rightPaddle.top - ball.bottom) < collisionTolerance and ballSpeedY > 0:
+            playSound = False
             ballSpeedY *= -1
         if abs(rightPaddle.bottom - ball.top) < collisionTolerance and ballSpeedY < 0:
+            playSound = False
             ballSpeedY *= -1
+        
+        if playSound:
+            bounceSound.play()
     
     if ball.colliderect(leftPaddle):
+        playSound = False
         if abs(leftPaddle.right - ball.left) < collisionTolerance and ballSpeedX < 0:
+            playSound = True
             ballSpeedX *= -1
         if abs(leftPaddle.left - ball.right) < collisionTolerance and ballSpeedX > 0:
+            playSound = True
             ballSpeedX *= -1
         if abs(leftPaddle.top - ball.bottom) < collisionTolerance and ballSpeedY > 0:
+            playSound = True
             ballSpeedY *= -1
         if abs(leftPaddle.bottom - ball.top) < collisionTolerance and ballSpeedY < 0:
+            playSound = True
             ballSpeedY *= -1
 
-    #pygame.draw.rect(screen, (255, 0, 0), ball)
+        if playSound:
+            bounceSound.play()
+
     pygame.draw.circle(screen, (255, 255, 255), (ball.x + (ballWidth/2), ball.y + (ballHeight/2)), ballWidth/2)
 
 def drawScore():
