@@ -37,6 +37,7 @@ scoreRight = 0
 collisionTolerance = 10
 
 pygame.init()
+pygame.display.set_caption("Pong")
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 clock = pygame.time.Clock()
 textFont = pygame.font.Font("assets/bit5x3.ttf", 120)
@@ -82,6 +83,8 @@ def drawBouncingBall():
 
     ball.x += ballSpeedX
     ball.y += ballSpeedY
+
+    playBounce = False
 
     if ball.top <= 0 or ball.bottom >= screenHeight:
         bounceSound.play()
@@ -132,7 +135,7 @@ def drawBouncingBall():
             bounceSound.play()
     
     if ball.colliderect(leftPaddle):
-        playSound = False
+        playBounce = False
         if abs(leftPaddle.right - ball.left) < collisionTolerance and ballSpeedX < 0:
             playSound = True
             ballSpeedX *= -1
